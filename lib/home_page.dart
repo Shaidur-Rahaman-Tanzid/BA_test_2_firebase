@@ -172,115 +172,127 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Consumer<CartModel>(
                       builder: (context,value,child){
-                        return Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                              itemCount: value.cartItems.length,
-                            itemBuilder: (context,index){
-                                return  badges.Badge(
-                                  onTap: (){
-                                    Provider.of<CartModel>(context,listen: false)
-                                        .removeItemsFromCart(index);
-                                  },
-                                  position: badges.BadgePosition.topEnd(top: -3, end: 5),
-                                  badgeContent: Icon(Icons.remove_circle_outline_outlined),
-                                  badgeStyle: badges.BadgeStyle(
-                                    badgeColor: Colors.white,
-                                    borderSide: BorderSide(color: Colors.white, width: 2),
-                                  ),
-                                  child: Container(
-                                    height: 100,
-                                      child: Container(
-                                        child: ListTile(
-                                          horizontalTitleGap: 0.0,
-                                          contentPadding: EdgeInsets.zero,
-                                          leading: Container(
-                                            width: 100,
-                                            child: Image.asset(
-                                              value.cartItems[index][3],
-                                              height: 100, // Adjust the height as needed
-                                              width: 100, // Adjust the width as needed
-                                              fit: BoxFit.scaleDown,
-                                            ),
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                            itemCount: value.cartItems.length,
+                          itemBuilder: (context,index){
+                            //int quantity = value.cartItems[index].quantity;
+                              return  badges.Badge(
+                                onTap: (){
+                                  Provider.of<CartModel>(context,listen: false)
+                                      .removeItemsFromCart(index);
+                                },
+                                position: badges.BadgePosition.topEnd(top: -3, end: 3),
+                                badgeContent: Icon(Icons.remove_circle_outline_outlined, size: 20),
+                                badgeStyle: badges.BadgeStyle(
+                                  badgeColor: Colors.white,
+                                  borderSide: BorderSide(color: Colors.white, width: 2),
+                                ),
+                                child: Container(
+                                  height: 100,
+                                    child: Container(
+                                      child: ListTile(
+                                        horizontalTitleGap: 0.0,
+                                        contentPadding: EdgeInsets.zero,
+                                        leading: Container(
+                                          width: 100,
+                                          child: Image.asset(
+                                            value.cartItems[index][3],
+                                            height: 100, // Adjust the height as needed
+                                            width: 100, // Adjust the width as needed
+                                            fit: BoxFit.scaleDown,
                                           ),
-                                          title: Padding(
-                                            padding: const EdgeInsets.only(top: 30),
-                                            child: Text('\$'+value.cartItems[index][0],style: TextStyle(
+                                        ),
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(top: 30),
+                                          child: Text('\$'+value.cartItems[index][0],style: TextStyle(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(value.cartItems[index][1],style: TextStyle(
                                               fontSize: 17.0,
-                                              fontWeight: FontWeight.bold,
                                             ),),
-                                          ),
-                                          subtitle: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            Text(value.cartItems[index][2],style: TextStyle(
+                                              fontSize: 14.0,
+                                            ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Container(
+                                          width: 85,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
-                                              Text(value.cartItems[index][1],style: TextStyle(
-                                                fontSize: 17.0,
-                                              ),),
-                                              Text(value.cartItems[index][2],style: TextStyle(
-                                                fontSize: 14.0,
-                                              ),
-                                              ),
-                                            ],
-                                          ),
-                                          trailing: Container(
-                                            width: 85,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Container(
-                                                  child: InkWell(
-                                                      child: Icon(Icons.remove,size: 15),
-                                                    onTap: (){
-                                                      setState(() {
-                                                        if (quantity > 1) {
-                                                          quantity--;
-                                                        }
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                                Text(
-                                                  quantity.toString(),
-                                                  style: TextStyle(fontSize: 16.0),
-                                                ),
-                                  
-                                                InkWell(child: Icon(Icons.add,size: 15),
+                                              Container(
+                                                child: InkWell(
+                                                    child: Icon(Icons.remove,size: 15),
                                                   onTap: (){
-                                  
                                                     setState(() {
-                                                      quantity++;
+                                                      if (quantity > 1) {
+                                                        quantity--;
+                                                        //value.cartItems[index].quantity = quantity;
+                                                      }
                                                     });
                                                   },
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                              Text(
+                                                quantity.toString(),
+                                                style: TextStyle(fontSize: 16.0),
+                                              ),
+
+                                              Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: BoxDecoration(
+                                                    color: AppColors.primaryColor,
+                                                  borderRadius: BorderRadius.circular(5)
+                                                ),
+                                                child: InkWell(child: Icon(Icons.add,size: 15),
+                                                  onTap: (){
+
+                                                    setState(() {
+                                                      quantity++;
+                                                      //value.cartItems[index].quantity = quantity;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                );
-                            },
-                          ),
+                                  ),
+                              );
+                          },
                         );
                       },
                     ),
                     SizedBox(height: 200),
-                    Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20,right: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [Text("Total amount:"),
+                       Consumer<CartModel>(
+                         builder: (context,value,child) {
+                          return Container(
+                             child: Padding(
+                               padding: const EdgeInsets.only(left: 20, right: 20),
+                                child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                  Text("Total amount:"),
 
-                             Text(
-                               '\$${total.toStringAsFixed(2)}',
-                               style: TextStyle(fontSize: 16.0),
-                             ),
-                           ],
-                         ),
-                        )),
+                                  Text('\$'+value.calculateTotal(),
+                                  style: TextStyle(fontWeight: FontWeight.bold),),
+                                   ],
+                                ),
+                            )
+                         );
+                  }
+                  ),
                     const SizedBox(height: 50),
                     Container(
                       width: double.infinity,
