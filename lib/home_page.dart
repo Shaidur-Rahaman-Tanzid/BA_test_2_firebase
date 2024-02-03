@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_ui/cart.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:firebase_ui/cart_model.dart';
 import 'package:firebase_ui/widget/colors.dart';
 import 'package:firebase_ui/widget/produnt_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'model.dart';
 import 'sign_up.dart';
 
@@ -22,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   final currentUser = FirebaseAuth.instance.currentUser!; //
   List<ItemModel> products = [];
   double total = 2065.14;
+  int quantity = 1;
 
   @override
   void initState() {
@@ -144,8 +147,7 @@ class _HomePageState extends State<HomePage> {
                                   description: products[index].model!,
                                   price: '\$'+products[index].price!,
                                   onPressed: () {
-                                    // Add to cart logic
-                                    print('${products[index].title} added to cart');
+                                    Provider.of<CartModel>(context, listen: false).addItemsToCart(index);
                                   },
                                 ),
                               ),
@@ -165,26 +167,106 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "My Cart",
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
+                            fontSize: 34, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Column(
-                      children: products.map((product) {
-                        return MyCard(
-                          imagePath: product.imageUrl!,
-                          price: '\$'+product.price!,
-                          title: product.title!,
-                          description: product.model!,
-                          onUpdateTotal: (newTotal) {
-                            setState(() {
-                              total = newTotal;
-                            });
-                          },
-                          onPressed: () {},
+                    Consumer<CartModel>(
+                      builder: (context,value,child){
+                        return Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                              itemCount: value.cartItems.length,
+                            itemBuilder: (context,index){
+                                return  badges.Badge(
+                                  onTap: (){
+                                    Provider.of<CartModel>(context,listen: false)
+                                        .removeItemsFromCart(index);
+                                  },
+                                  position: badges.BadgePosition.topEnd(top: -3, end: 5),
+                                  badgeContent: Icon(Icons.remove_circle_outline_outlined),
+                                  badgeStyle: badges.BadgeStyle(
+                                    badgeColor: Colors.white,
+                                    borderSide: BorderSide(color: Colors.white, width: 2),
+                                  ),
+                                  child: Container(
+                                    height: 100,
+                                      child: Container(
+                                        child: ListTile(
+                                          horizontalTitleGap: 0.0,
+                                          contentPadding: EdgeInsets.zero,
+                                          leading: Container(
+                                            width: 100,
+                                            child: Image.asset(
+                                              value.cartItems[index][3],
+                                              height: 100, // Adjust the height as needed
+                                              width: 100, // Adjust the width as needed
+                                              fit: BoxFit.scaleDown,
+                                            ),
+                                          ),
+                                          title: Padding(
+                                            padding: const EdgeInsets.only(top: 30),
+                                            child: Text('\$'+value.cartItems[index][0],style: TextStyle(
+                                              fontSize: 17.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(value.cartItems[index][1],style: TextStyle(
+                                                fontSize: 17.0,
+                                              ),),
+                                              Text(value.cartItems[index][2],style: TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: Container(
+                                            width: 85,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Container(
+                                                  child: InkWell(
+                                                      child: Icon(Icons.remove,size: 15),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        if (quantity > 1) {
+                                                          quantity--;
+                                                        }
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                                Text(
+                                                  quantity.toString(),
+                                                  style: TextStyle(fontSize: 16.0),
+                                                ),
+                                  
+                                                InkWell(child: Icon(Icons.add,size: 15),
+                                                  onTap: (){
+                                  
+                                                    setState(() {
+                                                      quantity++;
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                );
+                            },
+                          ),
                         );
-                      }).toList(),
+                      },
                     ),
+                    SizedBox(height: 200),
                     Container(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20,right: 20),

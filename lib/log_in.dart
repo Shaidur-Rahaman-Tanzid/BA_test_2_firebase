@@ -111,7 +111,11 @@ class _LogInState extends State<LogIn> {
                                 builder: (context) => HomePage()),
                           );
                         } else {
-                          print('Unsuccessful');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Invalid email or password'),
+                            ),
+                          );
                         }
                       });
                       try {
@@ -124,7 +128,8 @@ class _LogInState extends State<LogIn> {
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
                           print('No user found for that email.');
-                        } else if (e.code == 'wrong-password') {
+                        }
+                        else if (e.code == 'wrong-password') {
                           print('Wrong password provided for that user.');
                         }
                       }

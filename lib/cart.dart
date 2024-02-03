@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'widget/colors.dart';
 
 
@@ -86,8 +85,6 @@ class _MyCardState extends State<MyCard> {
               ),
             ),
             Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 70,right: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -142,7 +139,6 @@ class _MyCardState extends State<MyCard> {
                   ],
                 ),
               ),
-            ),
           ],
         ),
       ),
