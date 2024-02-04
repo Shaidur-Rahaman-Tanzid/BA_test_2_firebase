@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
   final _auth = FirebaseAuth.instance;
   final currentUser = FirebaseAuth.instance.currentUser!; //
   List<ItemModel> products = [];
-  double total = 2065.14;
-  int quantity = 1;
+  //double total = 2065.14;
+  //int quantity = 1;
 
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadProducts() {
-    // Hardcoded JSON data with image URLs
     String jsonData = '''
     [
       {"price": "249.50", "title": "SONY Premium Headphones", "model": "Model: WH-1000XM4, Black", "imageUrl": "assets/images/Rectangle 28.png"},
@@ -45,7 +44,8 @@ class _HomePageState extends State<HomePage> {
   ''';
 
     // Decode JSON data
-    List<Map<String, dynamic>> jsonDataList = List<Map<String, dynamic>>.from(jsonDecode(jsonData));
+    List<Map<String, dynamic>> jsonDataList =
+        List<Map<String, dynamic>>.from(jsonDecode(jsonData));
 
     // Map the JSON data to ItemModel instances
     products = jsonDataList.map((data) => ItemModel.fromJson(data)).toList();
@@ -53,7 +53,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                                         as Map<String, dynamic>;
                                     return Text(
                                       'Hello ' + userData['username'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold),
                                     );
@@ -100,7 +99,8 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => SignUp()));
+                                            builder: (context) =>
+                                                const SignUp()));
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.primaryColor,
@@ -126,14 +126,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                     GridView.builder(
+                    Consumer<CartModel>(builder: (context, value, child) {
+                      return GridView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 10.0,
                           mainAxisExtent: 325,
-                         // childAspectRatio: (10.0),
+                          // childAspectRatio: (10.0),
                           mainAxisSpacing: 0.0,
                         ),
                         itemCount: products.length,
@@ -145,17 +147,25 @@ class _HomePageState extends State<HomePage> {
                                   imagePath: products[index].imageUrl!,
                                   title: products[index].title!,
                                   description: products[index].model!,
-                                  price: '\$'+products[index].price!,
+                                  price: '\$' + products[index].price!,
                                   onPressed: () {
-                                    Provider.of<CartModel>(context, listen: false).addItemsToCart(index);
+                                    // setState(() {
+                                    //   int currentValue =
+                                    //       int.parse(value.cartItems[index][4]);
+                                    //   value.cartItems[index][4] =
+                                    //       (currentValue + 1).toString();
+                                    // });
+                                    Provider.of<CartModel>(context,
+                                            listen: false)
+                                        .addItemsToCart(products[index]);
                                   },
                                 ),
                               ),
                             ],
                           );
                         },
-                      ),
-
+                      );
+                    }),
                   ],
                 )
               : Column(
@@ -171,133 +181,175 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Consumer<CartModel>(
-                      builder: (context,value,child){
+                      builder: (context, value, child) {
                         return ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                            itemCount: value.cartItems.length,
-                          itemBuilder: (context,index){
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: value.cartItems.length,
+                          itemBuilder: (context, index) {
                             //int quantity = value.cartItems[index].quantity;
-                              return  badges.Badge(
-                                onTap: (){
-                                  Provider.of<CartModel>(context,listen: false)
-                                      .removeItemsFromCart(index);
-                                },
-                                position: badges.BadgePosition.topEnd(top: -3, end: 3),
-                                badgeContent: Icon(Icons.remove_circle_outline_outlined, size: 20),
-                                badgeStyle: badges.BadgeStyle(
-                                  badgeColor: Colors.white,
-                                  borderSide: BorderSide(color: Colors.white, width: 2),
-                                ),
+                            return badges.Badge(
+                              onTap: () {
+                                Provider.of<CartModel>(context, listen: false)
+                                    .removeItemsFromCart(index);
+                              },
+                              position:
+                                  badges.BadgePosition.topEnd(top: -3, end: 3),
+                              badgeContent: const Icon(
+                                  Icons.remove_circle_outline_outlined,
+                                  size: 20),
+                              badgeStyle: const badges.BadgeStyle(
+                                badgeColor: Colors.white,
+                                borderSide:
+                                    BorderSide(color: Colors.white, width: 2),
+                              ),
+                              child: Container(
+                                height: 100,
                                 child: Container(
-                                  height: 100,
-                                    child: Container(
-                                      child: ListTile(
-                                        horizontalTitleGap: 0.0,
-                                        contentPadding: EdgeInsets.zero,
-                                        leading: Container(
-                                          width: 100,
-                                          child: Image.asset(
-                                            value.cartItems[index][3],
-                                            height: 100, // Adjust the height as needed
-                                            width: 100, // Adjust the width as needed
-                                            fit: BoxFit.scaleDown,
-                                          ),
-                                        ),
-                                        title: Padding(
-                                          padding: const EdgeInsets.only(top: 30),
-                                          child: Text('\$'+value.cartItems[index][0],style: TextStyle(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),),
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(value.cartItems[index][1],style: TextStyle(
-                                              fontSize: 17.0,
-                                            ),),
-                                            Text(value.cartItems[index][2],style: TextStyle(
-                                              fontSize: 14.0,
-                                            ),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: Container(
-                                          width: 85,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Container(
-                                                child: InkWell(
-                                                    child: Icon(Icons.remove,size: 15),
-                                                  onTap: (){
-                                                    setState(() {
-                                                      if (quantity > 1) {
-                                                        quantity--;
-                                                        //value.cartItems[index].quantity = quantity;
-                                                      }
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              Text(
-                                                quantity.toString(),
-                                                style: TextStyle(fontSize: 16.0),
-                                              ),
-
-                                              Container(
-                                                height: 20,
-                                                width: 20,
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.primaryColor,
-                                                  borderRadius: BorderRadius.circular(5)
-                                                ),
-                                                child: InkWell(child: Icon(Icons.add,size: 15),
-                                                  onTap: (){
-
-                                                    setState(() {
-                                                      quantity++;
-                                                      //value.cartItems[index].quantity = quantity;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                  child: ListTile(
+                                    horizontalTitleGap: 0.0,
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: Container(
+                                      width: 100,
+                                      child: Image.asset(
+                                        value.cartItems[index].imageUrl
+                                            .toString(),
+                                        height:
+                                            100, // Adjust the height as needed
+                                        width:
+                                            100, // Adjust the width as needed
+                                        fit: BoxFit.scaleDown,
+                                      ),
+                                    ),
+                                    title: Padding(
+                                      padding: const EdgeInsets.only(top: 30),
+                                      child: Text(
+                                        '\$' +
+                                            value.cartItems[index].price
+                                                .toString(),
+                                        style: const TextStyle(
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          value.cartItems[index].title
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 17.0,
+                                          ),
+                                        ),
+                                        Text(
+                                          value.cartItems[index].model
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: Container(
+                                      width: 85,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Container(
+                                            child: InkWell(
+                                              child: const Icon(Icons.remove,
+                                                  size: 15),
+                                              onTap: () {
+                                                // setState(() {
+                                                //   int currentValue = int.parse(
+                                                //       value.cartItems[index]
+                                                //           1);
+                                                //   if (currentValue < 2) {
+                                                //     setState(() {
+                                                //       Provider.of<CartModel>(
+                                                //               context,
+                                                //               listen: false)
+                                                //           .removeItemsFromCart(
+                                                //               index);
+                                                //     });
+                                                //   } else {
+                                                //     setState(() {
+                                                //       value.cartItems[index]
+                                                //               [4] =
+                                                //           (currentValue - 1)
+                                                //               .toString();
+                                                //     });
+                                                //   }
+                                                // });
+                                              },
+                                            ),
+                                          ),
+                                          // Text(
+                                          //   value.cartItems[index]
+                                          //       .toString(),
+                                          //   style:
+                                          //       const TextStyle(fontSize: 16.0),
+                                          // ),
+                                          Container(
+                                            height: 20,
+                                            width: 20,
+                                            decoration: BoxDecoration(
+                                                color: AppColors.primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            child: InkWell(
+                                              child: const Icon(Icons.add,
+                                                  size: 15),
+                                              onTap: () {
+                                                // setState(() {
+                                                //   int currentValue = int.parse(
+                                                //       value.cartItems[index]
+                                                //           [4]);
+                                                //   value.cartItems[index][4] =
+                                                //       (currentValue + 1)
+                                                //           .toString();
+                                                // });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                              );
+                                ),
+                              ),
+                            );
                           },
                         );
                       },
                     ),
-                    SizedBox(height: 200),
-                       Consumer<CartModel>(
-                         builder: (context,value,child) {
-                          return Container(
-                             child: Padding(
-                               padding: const EdgeInsets.only(left: 20, right: 20),
-                                child: Row(
-                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                  Text("Total amount:"),
-
-                                  Text('\$'+value.calculateTotal(),
-                                  style: TextStyle(fontWeight: FontWeight.bold),),
-                                   ],
-                                ),
-                            )
-                         );
-                  }
-                  ),
+                    const SizedBox(height: 200),
+                    Consumer<CartModel>(builder: (context, value, child) {
+                      return Container(
+                          child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Total amount:"),
+                            Text(
+                              '\$' + value.calculateTotal(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ));
+                    }),
                     const SizedBox(height: 50),
                     Container(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 10,right: 10),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
                         child: ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
@@ -307,13 +359,12 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(40.0),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               'CHECK OUT',
                               style: TextStyle(color: Colors.white),
                             )),
                       ),
                     ),
-
                   ],
                 ),
         ),
