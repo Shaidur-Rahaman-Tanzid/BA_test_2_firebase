@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:badges/badges.dart' as badges;
 import 'package:firebase_ui/cart_model.dart';
 import 'package:firebase_ui/widget/colors.dart';
 import 'package:firebase_ui/widget/produnt_card.dart';
@@ -134,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 10.0,
-                          mainAxisExtent: 320,
+                          mainAxisExtent: 330,
                           // childAspectRatio: (10.0),
                           mainAxisSpacing: 0.0,
                         ),
@@ -149,15 +148,15 @@ class _HomePageState extends State<HomePage> {
                                   description: products[index].model!,
                                   price: '\$${products[index].price!}',
                                   onPressed: () {
-                                     // setState(() {
-                                     //   int currentValue =
-                                     //       int.parse(value.cartItems[index].quantity as String);
-                                     //   value.cartItems[index].quantity =
-                                     //      (currentValue + 1).toString() as int?;
-                                     // });
                                     Provider.of<CartModel>(context,
                                             listen: false)
                                         .addItemsToCart(products[index]);
+
+                                    // ScaffoldMessenger.of(context)
+                                    //     .showSnackBar(const SnackBar(
+                                    //   content: Text("Item Added"),
+                                    //   duration: Duration(seconds: 2),
+                                    // ));
                                   },
                                 ),
                               ),
@@ -201,8 +200,7 @@ class _HomePageState extends State<HomePage> {
                                           .toString(),
                                       height:
                                           100, // Adjust the height as needed
-                                      width:
-                                          100, // Adjust the width as needed
+                                      width: 100, // Adjust the width as needed
                                       fit: BoxFit.scaleDown,
                                     ),
                                   ),
@@ -221,15 +219,13 @@ class _HomePageState extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        value.cartItems[index].title
-                                            .toString(),
+                                        value.cartItems[index].title.toString(),
                                         style: const TextStyle(
                                           fontSize: 17.0,
                                         ),
                                       ),
                                       Text(
-                                        value.cartItems[index].model
-                                            .toString(),
+                                        value.cartItems[index].model.toString(),
                                         style: const TextStyle(
                                           fontSize: 14.0,
                                         ),
@@ -247,7 +243,8 @@ class _HomePageState extends State<HomePage> {
                                             child: const Icon(Icons.remove,
                                                 size: 15),
                                             onTap: () {
-                                              Provider.of<CartModel>(context, listen: false)
+                                              Provider.of<CartModel>(context,
+                                                      listen: false)
                                                   .decrementItem(index);
                                             },
                                           ),
@@ -266,10 +263,11 @@ class _HomePageState extends State<HomePage> {
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: InkWell(
-                                            child: const Icon(Icons.add,
-                                                size: 15),
+                                            child:
+                                                const Icon(Icons.add, size: 15),
                                             onTap: () {
-                                              Provider.of<CartModel>(context, listen: false)
+                                              Provider.of<CartModel>(context,
+                                                      listen: false)
                                                   .incrementItem(index);
                                             },
                                           ),

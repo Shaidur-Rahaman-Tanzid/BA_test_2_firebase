@@ -4,10 +4,8 @@ import 'package:firebase_ui/widget/colors.dart';
 import 'package:firebase_ui/widget/textfield.dart';
 import 'package:flutter/material.dart';
 
-
 import 'home_page.dart';
 import 'log_in.dart';
-
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -34,7 +32,6 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 8, right: 8),
@@ -44,7 +41,7 @@ class _SignUpState extends State<SignUp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 80 ),
+                const SizedBox(height: 80),
                 const Text(
                   'Sign up',
                   style: TextStyle(
@@ -68,6 +65,7 @@ class _SignUpState extends State<SignUp> {
                 MyTextField(
                   hintText: "Email",
                   subtext: "Email",
+                  keyboardType: TextInputType.emailAddress,
                   textController: _emailController, // Change this line
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -117,13 +115,15 @@ class _SignUpState extends State<SignUp> {
                   height: 50.0,
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: ElevatedButton(
-                    onPressed: ()async{
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                      }else{
+                      } else {
                         print('Unsuccessful');
                       }
                       try {
-                        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        UserCredential userCredential = await FirebaseAuth
+                            .instance
+                            .createUserWithEmailAndPassword(
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim(),
                         );
@@ -135,8 +135,11 @@ class _SignUpState extends State<SignUp> {
                             'username': _nameController.text,
                             'lastname': 'Empty..'
                           });
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => HomePage(),));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ));
                         }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
@@ -196,4 +199,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-

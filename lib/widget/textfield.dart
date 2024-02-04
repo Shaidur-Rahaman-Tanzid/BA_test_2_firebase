@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'colors.dart';
 
-
-
 class MyTextField extends StatefulWidget {
   final String hintText;
   final String subtext;
   final TextEditingController? textController; // Change this line
   final String? Function(String? value)? validator;
+  final keyboardType;
 
   const MyTextField({
     required this.hintText,
     required this.subtext,
     this.textController, // Change this line
     this.validator,
+    this.keyboardType,
     Key? key,
   }) : super(key: key);
 
@@ -46,7 +46,8 @@ class _TextFieldState extends State<MyTextField> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Visibility(
-                        visible: widget.textController?.text.isNotEmpty ?? false,
+                        visible:
+                            widget.textController?.text.isNotEmpty ?? false,
                         child: Text(
                           widget.subtext,
                           style: const TextStyle(
@@ -56,6 +57,7 @@ class _TextFieldState extends State<MyTextField> {
                       Expanded(
                         child: TextFormField(
                           controller: widget.textController,
+                          keyboardType: TextInputType.text,
                           validator: widget.validator,
                           decoration: InputDecoration(
                             hintText: widget.hintText,

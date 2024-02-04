@@ -32,7 +32,6 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -42,7 +41,7 @@ class _LogInState extends State<LogIn> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 80 ),
+                const SizedBox(height: 80),
                 const Text(
                   'Log in',
                   style: TextStyle(
@@ -54,6 +53,7 @@ class _LogInState extends State<LogIn> {
                 MyTextField(
                   hintText: "Email",
                   subtext: "Email",
+                  keyboardType: TextInputType.emailAddress,
                   textController: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -101,14 +101,14 @@ class _LogInState extends State<LogIn> {
                     onPressed: () async {
                       FirebaseAuth.instance
                           .signInWithEmailAndPassword(
-                              email: _emailController.text.trim(), password: _passwordController.text.trim())
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text.trim())
                           .then((value) {
                         if (_formKey.currentState!.validate()) {
                           print("Successfull");
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -118,18 +118,10 @@ class _LogInState extends State<LogIn> {
                           );
                         }
                       });
-                      try {
-                        UserCredential userCredential = await FirebaseAuth
-                            .instance
-                            .signInWithEmailAndPassword(
-                          email: _emailController.text.trim(),
-                          password: _passwordController.text.trim(),
-                        );
-                      } on FirebaseAuthException catch (e) {
+                      try {} on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
                           print('No user found for that email.');
-                        }
-                        else if (e.code == 'wrong-password') {
+                        } else if (e.code == 'wrong-password') {
                           print('Wrong password provided for that user.');
                         }
                       }
