@@ -35,10 +35,10 @@ class _HomePageState extends State<HomePage> {
   void loadProducts() {
     String jsonData = '''
     [
-      {"price": "249.50", "title": "SONY Premium Headphones", "model": "Model: WH-1000XM4, Black", "imageUrl": "assets/images/Rectangle 28.png"},
-      {"price": "129.00", "title": "SONY Wireless Headphones", "model": "Model: WH-1000XM4, Beige", "imageUrl": "assets/images/Rectangle 30.png"},
-      {"price": "349.99", "title": "Lenovo Laptop", "model": "Model: LH-200MX5, Grey", "imageUrl": "assets/images/image 12.png"},
-      {"price": "1250.99", "title": "SONY TV", "model": "Model: WH-1000XM4, Beige", "imageUrl": "assets/images/image 9.png"}
+      {"price": "249.50", "title": "SONY Premium Headphones", "model": "Model: WH-1000XM4, Black", "imageUrl": "assets/images/Rectangle 28.png","quantity":0},
+      {"price": "129.00", "title": "SONY Wireless Headphones", "model": "Model: WH-1000XM4, Beige", "imageUrl": "assets/images/Rectangle 30.png","quantity":0},
+      {"price": "349.99", "title": "Lenovo Laptop", "model": "Model: LH-200MX5, Grey", "imageUrl": "assets/images/image 12.png","quantity":0},
+      {"price": "1250.99", "title": "SONY TV", "model": "Model: WH-1000XM4, Beige", "imageUrl": "assets/images/image 9.png","quantity":0}
       
     ]
   ''';
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 10.0,
-                          mainAxisExtent: 325,
+                          mainAxisExtent: 320,
                           // childAspectRatio: (10.0),
                           mainAxisSpacing: 0.0,
                         ),
@@ -147,14 +147,14 @@ class _HomePageState extends State<HomePage> {
                                   imagePath: products[index].imageUrl!,
                                   title: products[index].title!,
                                   description: products[index].model!,
-                                  price: '\$' + products[index].price!,
+                                  price: '\$${products[index].price!}',
                                   onPressed: () {
-                                    // setState(() {
-                                    //   int currentValue =
-                                    //       int.parse(value.cartItems[index][4]);
-                                    //   value.cartItems[index][4] =
-                                    //       (currentValue + 1).toString();
-                                    // });
+                                     // setState(() {
+                                     //   int currentValue =
+                                     //       int.parse(value.cartItems[index].quantity as String);
+                                     //   value.cartItems[index].quantity =
+                                     //      (currentValue + 1).toString() as int?;
+                                     // });
                                     Provider.of<CartModel>(context,
                                             listen: false)
                                         .addItemsToCart(products[index]);
@@ -188,136 +188,93 @@ class _HomePageState extends State<HomePage> {
                           itemCount: value.cartItems.length,
                           itemBuilder: (context, index) {
                             //int quantity = value.cartItems[index].quantity;
-                            return badges.Badge(
-                              onTap: () {
-                                Provider.of<CartModel>(context, listen: false)
-                                    .removeItemsFromCart(index);
-                              },
-                              position:
-                                  badges.BadgePosition.topEnd(top: -3, end: 3),
-                              badgeContent: const Icon(
-                                  Icons.remove_circle_outline_outlined,
-                                  size: 20),
-                              badgeStyle: const badges.BadgeStyle(
-                                badgeColor: Colors.white,
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 2),
-                              ),
+                            return Container(
+                              height: 100,
                               child: Container(
-                                height: 100,
-                                child: Container(
-                                  child: ListTile(
-                                    horizontalTitleGap: 0.0,
-                                    contentPadding: EdgeInsets.zero,
-                                    leading: Container(
-                                      width: 100,
-                                      child: Image.asset(
-                                        value.cartItems[index].imageUrl
-                                            .toString(),
-                                        height:
-                                            100, // Adjust the height as needed
-                                        width:
-                                            100, // Adjust the width as needed
-                                        fit: BoxFit.scaleDown,
+                                child: ListTile(
+                                  horizontalTitleGap: 0.0,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: Container(
+                                    width: 100,
+                                    child: Image.asset(
+                                      value.cartItems[index].imageUrl
+                                          .toString(),
+                                      height:
+                                          100, // Adjust the height as needed
+                                      width:
+                                          100, // Adjust the width as needed
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                  ),
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 30),
+                                    child: Text(
+                                      '\$${value.cartItems[index].price}',
+                                      style: const TextStyle(
+                                        fontSize: 17.0,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    title: Padding(
-                                      padding: const EdgeInsets.only(top: 30),
-                                      child: Text(
-                                        '\$' +
-                                            value.cartItems[index].price
-                                                .toString(),
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        value.cartItems[index].title
+                                            .toString(),
                                         style: const TextStyle(
                                           fontSize: 17.0,
-                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      Text(
+                                        value.cartItems[index].model
+                                            .toString(),
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Container(
+                                    width: 85,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(
-                                          value.cartItems[index].title
-                                              .toString(),
-                                          style: const TextStyle(
-                                            fontSize: 17.0,
+                                        Container(
+                                          child: InkWell(
+                                            child: const Icon(Icons.remove,
+                                                size: 15),
+                                            onTap: () {
+                                              Provider.of<CartModel>(context, listen: false)
+                                                  .decrementItem(index);
+                                            },
                                           ),
                                         ),
                                         Text(
-                                          value.cartItems[index].model
+                                          value.cartItems[index].quantity
                                               .toString(),
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
+                                          style:
+                                              const TextStyle(fontSize: 16.0),
+                                        ),
+                                        Container(
+                                          height: 20,
+                                          width: 20,
+                                          decoration: BoxDecoration(
+                                              color: AppColors.primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: InkWell(
+                                            child: const Icon(Icons.add,
+                                                size: 15),
+                                            onTap: () {
+                                              Provider.of<CartModel>(context, listen: false)
+                                                  .incrementItem(index);
+                                            },
                                           ),
                                         ),
                                       ],
-                                    ),
-                                    trailing: Container(
-                                      width: 85,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                            child: InkWell(
-                                              child: const Icon(Icons.remove,
-                                                  size: 15),
-                                              onTap: () {
-                                                // setState(() {
-                                                //   int currentValue = int.parse(
-                                                //       value.cartItems[index]
-                                                //           1);
-                                                //   if (currentValue < 2) {
-                                                //     setState(() {
-                                                //       Provider.of<CartModel>(
-                                                //               context,
-                                                //               listen: false)
-                                                //           .removeItemsFromCart(
-                                                //               index);
-                                                //     });
-                                                //   } else {
-                                                //     setState(() {
-                                                //       value.cartItems[index]
-                                                //               [4] =
-                                                //           (currentValue - 1)
-                                                //               .toString();
-                                                //     });
-                                                //   }
-                                                // });
-                                              },
-                                            ),
-                                          ),
-                                          // Text(
-                                          //   value.cartItems[index]
-                                          //       .toString(),
-                                          //   style:
-                                          //       const TextStyle(fontSize: 16.0),
-                                          // ),
-                                          Container(
-                                            height: 20,
-                                            width: 20,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.primaryColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            child: InkWell(
-                                              child: const Icon(Icons.add,
-                                                  size: 15),
-                                              onTap: () {
-                                                // setState(() {
-                                                //   int currentValue = int.parse(
-                                                //       value.cartItems[index]
-                                                //           [4]);
-                                                //   value.cartItems[index][4] =
-                                                //       (currentValue + 1)
-                                                //           .toString();
-                                                // });
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                     ),
                                   ),
                                 ),
@@ -337,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             const Text("Total amount:"),
                             Text(
-                              '\$' + value.calculateTotal(),
+                              '\$${value.calculateTotal().toStringAsFixed(2)}',
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),

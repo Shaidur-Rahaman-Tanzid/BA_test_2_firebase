@@ -8,7 +8,7 @@ class ProductCard extends StatelessWidget {
   final String price;
   final VoidCallback onPressed;
 
-  const ProductCard({
+  const ProductCard({super.key,
     required this.imagePath,
     required this.title,
     required this.description,
@@ -24,7 +24,7 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Card(
-            color: Color(0xFFF5F5F5),
+            color: const Color(0xFFF5F5F5),
             child: Center(
               child: Image.asset(
                 imagePath,
@@ -36,18 +36,19 @@ class ProductCard extends StatelessWidget {
           ),
           Text(
             price,
-            style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
           ),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14.0,
             ),
           ),
           Text(
             description,
-            style: TextStyle(fontSize: 11.0, color: Colors.grey),
+            style: const TextStyle(fontSize: 11.0, color: Colors.grey),
           ),
+          const SizedBox(height:5),
           Container(
             width: double.infinity,
             height: 30,
@@ -59,8 +60,8 @@ class ProductCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
                 child: Text(
                   'Add to Cart',
                   style: TextStyle(fontSize: 12.0, color: Colors.white),
