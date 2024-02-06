@@ -135,6 +135,7 @@ class _SignUpState extends State<SignUp> {
                             'username': _nameController.text,
                             'lastname': 'Empty..'
                           });
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(

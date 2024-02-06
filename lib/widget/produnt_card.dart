@@ -8,7 +8,8 @@ class ProductCard extends StatelessWidget {
   final String price;
   final VoidCallback onPressed;
 
-  const ProductCard({super.key,
+  const ProductCard({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.description,
@@ -48,7 +49,7 @@ class ProductCard extends StatelessWidget {
             description,
             style: const TextStyle(fontSize: 11.0, color: Colors.grey),
           ),
-          const SizedBox(height:5),
+          const SizedBox(height: 5),
           Container(
             width: double.infinity,
             height: 30,

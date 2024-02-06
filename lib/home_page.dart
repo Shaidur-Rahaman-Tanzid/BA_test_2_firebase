@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui/cart_model.dart';
+import 'package:firebase_ui/log_in.dart';
 import 'package:firebase_ui/widget/colors.dart';
 import 'package:firebase_ui/widget/produnt_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'all_user_details.dart';
 import 'model.dart';
 import 'sign_up.dart';
+import 'user_details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -53,13 +56,41 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
+      drawer: Drawer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 100),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserDetails()));
+              },
+              child: ListTile(
+                title: Text("User Details"),
+                leading: Icon(Icons.person_rounded),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllUserDetails()));
+              },
+              child: ListTile(
+                title: Text("All User Details"),
+                leading: Icon(Icons.group),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: _currentIndex == 0
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 50),
                     Container(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -98,8 +129,7 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SignUp()));
+                                            builder: (context) => LogIn()));
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.primaryColor,
@@ -170,7 +200,7 @@ class _HomePageState extends State<HomePage> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 20),
                     const Padding(
                       padding: EdgeInsets.only(left: 10),
                       child: Text(

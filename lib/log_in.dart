@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui/sign_up.dart';
 import 'package:firebase_ui/widget/colors.dart';
 import 'package:firebase_ui/widget/textfield.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _LogInState extends State<LogIn> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 80),
+                const SizedBox(height: 70),
                 const Text(
                   'Log in',
                   style: TextStyle(
@@ -49,7 +50,7 @@ class _LogInState extends State<LogIn> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: 80),
                 MyTextField(
                   hintText: "Email",
                   subtext: "Email",
@@ -96,7 +97,7 @@ class _LogInState extends State<LogIn> {
                 Container(
                   width: double.infinity,
                   height: 50.0,
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ElevatedButton(
                     onPressed: () async {
                       FirebaseAuth.instance
@@ -143,7 +144,32 @@ class _LogInState extends State<LogIn> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 140),
+                SizedBox(height: 20),
+                Center(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUp()));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                            ),
+                          ),
+                          child: const Text(
+                            'Create an Account',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 90),
                 Container(
                   child: Column(
                     children: [
